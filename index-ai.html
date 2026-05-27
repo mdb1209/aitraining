@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Training Hub | Home Health Sales</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Alta&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:       #0F1E45;
+      --navy-mid:   #1B2D5B;
+      --navy-light: #243875;
+      --blue:       #4B9FD4;
+      --sky:        #B3D4EC;
+      --sky-light:  #E8F4FB;
+      --lime:       #B0E040;
+      --lime-dk:    #82A81E;
+      --lime-glow:  rgba(176,224,64,.25);
+      --white:      #FFFFFF;
+      --offwhite:   #F3F7FF;
+      --text:       #1B2D5B;
+      --muted:      #6278A3;
+      --border:     #D0DDEF;
+      --shadow:     0 4px 20px rgba(15,30,69,.1);
+      --shadow-lg:  0 10px 40px rgba(15,30,69,.18);
+      --r:          14px;
+      --sw:         268px;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'Alta','Helvetica Neue',Arial,sans-serif;background:var(--offwhite);color:var(--text);display:flex;min-height:100vh;}
+
+    /* ── SIDEBAR ─────────────────────────────── */
+    .sidebar{width:var(--sw);background:var(--navy);position:fixed;top:0;left:0;height:100vh;display:flex;flex-direction:column;z-index:100;overflow-y:auto;transition:transform .3s;}
+    .sb-logo{padding:26px 22px 18px;border-bottom:1px solid rgba(255,255,255,.08);}
+    .sb-logo h1{font-family:'Playfair Display',serif;color:#fff;font-size:1.2rem;line-height:1.3;}
+    .sb-logo h1 span{color:var(--lime);}
+    .sb-logo p{color:var(--sky);font-size:.7rem;margin-top:4px;letter-spacing:.07em;text-transform:uppercase;}
+    .sb-nav{padding:14px 0;flex:1;}
+    .nav-lbl{font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:12px 22px 5px;}
+    .nav-a{display:flex;align-items:center;gap:10px;padding:10px 22px;color:rgba(255,255,255,.65);text-decoration:none;font-size:.855rem;transition:all .2s;border-left:3px solid transparent;cursor:pointer;}
+    .nav-a:hover,.nav-a.active{color:#fff;background:rgba(255,255,255,.06);border-left-color:var(--lime);}
+    .nav-a .ic{width:18px;text-align:center;flex-shrink:0;font-size:1rem;}
+    .sb-foot{padding:18px 22px;border-top:1px solid rgba(255,255,255,.08);}
+    .sb-tip{background:rgba(176,224,64,.1);border:1px solid rgba(176,224,64,.2);border-radius:10px;padding:12px 14px;}
+    .sb-tip p{color:var(--sky);font-size:.74rem;line-height:1.55;}
+    .sb-tip strong{color:var(--lime);}
+
+    /* ── MAIN ─────────────────────────────────── */
+    .main{margin-left:var(--sw);flex:1;}
+
+    /* ── HERO ─────────────────────────────────── */
+    .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 55%,var(--navy-light) 100%);padding:58px 48px 52px;position:relative;overflow:hidden;}
+    .hero::before{content:'';position:absolute;top:-90px;right:-90px;width:420px;height:420px;background:radial-gradient(circle,rgba(176,224,64,.15) 0%,transparent 65%);pointer-events:none;}
+    .hero::after{content:'';position:absolute;bottom:-70px;left:25%;width:320px;height:320px;background:radial-gradient(circle,rgba(75,159,212,.12) 0%,transparent 65%);pointer-events:none;}
+    .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(176,224,64,.15);border:1px solid rgba(176,224,64,.3);color:var(--lime);padding:4px 14px;border-radius:20px;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px;}
+    .hero h1{font-family:'Playfair Display',serif;color:#fff;font-size:2.7rem;font-weight:700;line-height:1.2;margin-bottom:12px;}
+    .hero h1 em{color:var(--lime);font-style:italic;}
+    .hero p{color:var(--sky);font-size:.95rem;max-width:550px;line-height:1.7;margin-bottom:30px;}
+    .search-wrap{display:flex;align-items:center;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:12px;padding:5px 6px 5px 18px;max-width:520px;transition:all .2s;}
+    .search-wrap:focus-within{background:rgba(255,255,255,.14);border-color:var(--lime);box-shadow:0 0 0 3px var(--lime-glow);}
+    .search-wrap input{flex:1;background:none;border:none;outline:none;color:#fff;font-family:'Alta',sans-serif;font-size:.88rem;}
+    .search-wrap input::placeholder{color:rgba(255,255,255,.45);}
+    .search-btn{background:var(--lime);color:var(--navy);border:none;border-radius:8px;padding:9px 20px;font-family:'Alta',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;transition:background .2s;white-space:nowrap;}
+    .search-btn:hover{background:var(--lime-dk);color:#fff;}
+    .hero-stats{display:flex;gap:36px;margin-top:38px;flex-wrap:wrap;}
+    .h-stat .n{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--lime);line-height:1;}
+    .h-stat .l{color:var(--sky);font-size:.72rem;margin-top:3px;}
+
+    /* ── SECTIONS ─────────────────────────────── */
+    .sec{padding:48px 48px;}
+    .sec:nth-of-type(even){background:var(--white);}
+    .sec-lbl{font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;color:var(--blue);font-weight:600;margin-bottom:6px;}
+    .sec-title{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:700;color:var(--navy);margin-bottom:8px;}
+    .sec-desc{color:var(--muted);font-size:.88rem;max-width:620px;line-height:1.65;margin-bottom:28px;}
+
+    /* ── PROMPT TABS ──────────────────────────── */
+    .tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:26px;background:var(--offwhite);padding:5px;border-radius:var(--r);border:1px solid var(--border);}
+    .tab-btn{padding:8px 15px;border:none;background:none;border-radius:8px;font-family:'Alta',sans-serif;font-size:.8rem;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap;}
+    .tab-btn:hover{background:rgba(27,45,91,.06);color:var(--navy);}
+    .tab-btn.active{background:var(--navy);color:#fff;}
+    .tab-pane{display:none;}
+    .tab-pane.active{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:18px;}
+
+    /* ── PROMPT CARDS ─────────────────────────── */
+    .p-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:22px;transition:all .25s;cursor:pointer;position:relative;overflow:hidden;}
+    .p-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--sky);transition:background .2s;}
+    .p-card:hover{box-shadow:var(--shadow);border-color:var(--blue);transform:translateY(-2px);}
+    .p-card:hover::before{background:var(--lime);}
+    .p-tag{display:inline-block;background:var(--sky-light);color:var(--blue);font-size:.66rem;padding:3px 10px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:9px;}
+    .p-title{font-family:'Playfair Display',serif;font-size:.98rem;font-weight:600;color:var(--navy);margin-bottom:8px;}
+    .p-preview{font-size:.81rem;color:var(--muted);line-height:1.6;margin-bottom:15px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+    .p-actions{display:flex;gap:8px;}
+    .btn-use{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-family:'Alta',sans-serif;font-size:.78rem;cursor:pointer;transition:background .2s;}
+    .btn-use:hover{background:var(--navy-light);}
+    .btn-cp{background:var(--offwhite);color:var(--navy);border:1px solid var(--border);border-radius:8px;padding:8px 13px;font-family:'Alta',sans-serif;font-size:.78rem;cursor:pointer;transition:all .2s;}
+    .btn-cp:hover{border-color:var(--blue);color:var(--blue);}
+    .btn-cp.ok{background:var(--lime);border-color:var(--lime);color:var(--navy);}
+
+    /* ── MODAL ────────────────────────────────── */
+    .overlay{position:fixed;inset:0;background:rgba(8,16,42,.72);z-index:1000;display:none;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(4px);}
+    .overlay.open{display:flex;}
+    .modal{background:#fff;border-radius:18px;padding:36px;max-width:650px;width:100%;max-height:85vh;overflow-y:auto;position:relative;box-shadow:var(--shadow-lg);}
+    .modal-x{position:absolute;top:16px;right:16px;background:var(--offwhite);border:none;border-radius:8px;width:32px;height:32px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);transition:all .2s;}
+    .modal-x:hover{background:var(--border);color:var(--navy);}
+    .modal h2{font-family:'Playfair Display',serif;color:var(--navy);font-size:1.3rem;margin-bottom:4px;padding-right:36px;}
+    .modal-sub{color:var(--muted);font-size:.8rem;margin-bottom:20px;}
+    .m-prompt{background:var(--offwhite);border:1px solid var(--border);border-radius:10px;padding:16px;font-size:.855rem;line-height:1.75;color:var(--text);margin-bottom:20px;}
+    .m-prompt .ph{background:rgba(176,224,64,.22);border:1px dashed var(--lime-dk);border-radius:4px;padding:1px 7px;color:var(--navy);font-weight:700;}
+    .m-fields{display:flex;flex-direction:column;gap:12px;margin-bottom:22px;}
+    .m-field label{display:block;font-size:.73rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+    .m-field input,.m-field textarea{width:100%;padding:10px 13px;border:1.5px solid var(--border);border-radius:8px;font-family:'Alta',sans-serif;font-size:.875rem;color:var(--text);outline:none;transition:border-color .2s;}
+    .m-field input:focus,.m-field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(75,159,212,.14);}
+    .m-field textarea{resize:vertical;min-height:76px;}
+    .m-actions{display:flex;gap:10px;}
+    .btn-navy{background:var(--navy);color:#fff;border:none;border-radius:10px;padding:12px 22px;font-family:'Alta',sans-serif;font-size:.875rem;cursor:pointer;flex:1;transition:background .2s;}
+    .btn-navy:hover{background:var(--navy-light);}
+    .btn-lime{background:var(--lime);color:var(--navy);border:none;border-radius:10px;padding:12px 22px;font-family:'Alta',sans-serif;font-size:.875rem;font-weight:700;cursor:pointer;flex:1;transition:background .2s;}
+    .btn-lime:hover{background:var(--lime-dk);color:#fff;}
+
+    /* ── WORKFLOW TIMELINE ────────────────────── */
+    .timeline{display:flex;flex-direction:column;gap:0;}
+    .t-slot{display:flex;gap:22px;padding:18px 0;border-bottom:1px solid var(--border);}
+    .t-slot:last-child{border-bottom:none;}
+    .t-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:16px;}
+    .t-dot{width:14px;height:14px;border-radius:50%;background:var(--blue);border:3px solid var(--white);box-shadow:0 0 0 2px var(--blue);flex-shrink:0;margin-top:3px;}
+    .t-dot.g{background:var(--lime);box-shadow:0 0 0 2px var(--lime);}
+    .t-dot.d{background:var(--navy);box-shadow:0 0 0 2px var(--navy);}
+    .t-line{flex:1;width:2px;background:var(--border);margin-top:4px;}
+    .t-body{flex:1;padding-bottom:8px;}
+    .t-time{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:3px;}
+    .t-time.g{color:var(--lime-dk);}
+    .t-time.d{color:var(--navy-mid);}
+    .t-heading{font-family:'Playfair Display',serif;font-size:1rem;color:var(--navy);font-weight:600;margin-bottom:7px;}
+    .t-list{list-style:none;display:flex;flex-direction:column;gap:4px;margin-bottom:10px;}
+    .t-list li{font-size:.81rem;color:var(--muted);display:flex;align-items:flex-start;gap:6px;line-height:1.5;}
+    .t-list li::before{content:'→';color:var(--lime-dk);flex-shrink:0;}
+    .t-prompt-btn{background:var(--sky-light);color:var(--navy);border:1px solid var(--sky);border-radius:7px;padding:5px 12px;font-family:'Alta',sans-serif;font-size:.76rem;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px;}
+    .t-prompt-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+
+    /* ── CALCULATORS ──────────────────────────── */
+    .calc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:22px;}
+    .calc-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:26px;box-shadow:var(--shadow);}
+    .calc-icon{width:46px;height:46px;border-radius:12px;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:1.35rem;margin-bottom:14px;}
+    .calc-title{font-family:'Playfair Display',serif;font-size:1.08rem;color:var(--navy);margin-bottom:5px;}
+    .calc-desc{font-size:.78rem;color:var(--muted);margin-bottom:18px;line-height:1.5;}
+    .c-fields{display:flex;flex-direction:column;gap:11px;margin-bottom:16px;}
+    .c-field label{display:block;font-size:.72rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
+    .c-field input{width:100%;padding:9px 13px;border:1.5px solid var(--border);border-radius:8px;font-family:'Alta',sans-serif;font-size:.875rem;color:var(--text);outline:none;transition:border-color .2s;}
+    .c-field input:focus{border-color:var(--blue);}
+    .calc-btn{width:100%;background:var(--navy);color:#fff;border:none;border-radius:10px;padding:11px;font-family:'Alta',sans-serif;font-size:.855rem;cursor:pointer;transition:background .2s;margin-bottom:14px;}
+    .calc-btn:hover{background:var(--navy-light);}
+    .c-result{display:none;background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:10px;padding:18px;text-align:center;}
+    .c-result.show{display:block;}
+    .r-val{font-family:'Playfair Display',serif;font-size:2.1rem;color:var(--lime);font-weight:700;line-height:1;}
+    .r-lbl{color:var(--sky);font-size:.76rem;margin-top:4px;}
+    .r-detail{color:rgba(255,255,255,.6);font-size:.74rem;margin-top:8px;line-height:1.55;}
+
+    /* ── ACCOUNT TIERING ──────────────────────── */
+    .tier-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:28px;}
+    .tier-card{border-radius:var(--r);padding:24px;}
+    .tc-a{background:linear-gradient(135deg,var(--navy),var(--navy-mid));border:1px solid rgba(176,224,64,.3);}
+    .tc-b{background:linear-gradient(135deg,#1a3a70,#2b5499);border:1px solid rgba(75,159,212,.3);}
+    .tc-c{background:linear-gradient(135deg,#243577,#3456a8);border:1px solid rgba(179,212,236,.2);}
+    .t-badge{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:10px;font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;margin-bottom:12px;}
+    .tc-a .t-badge{background:var(--lime);color:var(--navy);}
+    .tc-b .t-badge{background:var(--blue);color:var(--navy);}
+    .tc-c .t-badge{background:var(--sky);color:var(--navy);}
+    .t-name{font-family:'Playfair Display',serif;font-size:.95rem;color:#fff;margin-bottom:4px;}
+    .t-freq{font-size:.73rem;color:rgba(255,255,255,.55);margin-bottom:12px;}
+    .t-crit{list-style:none;display:flex;flex-direction:column;gap:5px;}
+    .t-crit li{font-size:.78rem;color:rgba(255,255,255,.72);display:flex;align-items:flex-start;gap:7px;}
+    .t-crit li::before{content:'✓';font-weight:700;flex-shrink:0;}
+    .tc-a .t-crit li::before{color:var(--lime);}
+    .tc-b .t-crit li::before{color:var(--blue);}
+    .tc-c .t-crit li::before{color:var(--sky);}
+    /* Tier calculator */
+    .tier-calc-box{background:var(--offwhite);border:1px solid var(--border);border-radius:var(--r);padding:26px;}
+    .tier-calc-box h3{font-family:'Playfair Display',serif;color:var(--navy);margin-bottom:5px;}
+    .tier-calc-box p{font-size:.82rem;color:var(--muted);margin-bottom:18px;}
+    .tf-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:16px;}
+    .tf-field label{display:block;font-size:.7rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;}
+    .tf-field input,.tf-field select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Alta',sans-serif;font-size:.84rem;color:var(--text);outline:none;background:var(--white);transition:border-color .2s;}
+    .tf-field input:focus,.tf-field select:focus{border-color:var(--blue);}
+    .tr-result{display:none;background:var(--navy);border-radius:10px;padding:20px;margin-top:14px;}
+    .tr-result.show{display:block;}
+    .tr-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+    .tr-letter{width:46px;height:46px;border-radius:11px;background:var(--lime);color:var(--navy);font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
+    .tr-info h4{color:#fff;font-family:'Playfair Display',serif;}
+    .tr-info p{color:var(--sky);font-size:.76rem;}
+    .tr-recs{list-style:none;display:flex;flex-direction:column;gap:6px;}
+    .tr-recs li{font-size:.8rem;color:rgba(255,255,255,.72);display:flex;align-items:flex-start;gap:7px;}
+    .tr-recs li::before{content:'→';color:var(--lime);flex-shrink:0;}
+
+    /* ── OBJECTIONS ───────────────────────────── */
+    .obj-list{display:flex;flex-direction:column;gap:11px;}
+    .obj-item{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:var(--white);transition:box-shadow .2s;}
+    .obj-item:hover{box-shadow:var(--shadow);}
+    .obj-hdr{display:flex;align-items:center;justify-content:space-between;padding:17px 22px;cursor:pointer;user-select:none;}
+    .obj-q{font-family:'Playfair Display',serif;font-size:.92rem;color:var(--navy);flex:1;}
+    .obj-q::before{content:'"';color:var(--blue);}
+    .obj-q::after{content:'"';color:var(--blue);}
+    .obj-toggle{width:26px;height:26px;border-radius:7px;background:var(--offwhite);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:1rem;flex-shrink:0;transition:all .2s;}
+    .obj-item.open .obj-toggle{background:var(--navy);color:var(--lime);transform:rotate(45deg);}
+    .obj-body{display:none;padding:0 22px 22px;}
+    .obj-item.open .obj-body{display:block;}
+    .resp-card{background:var(--offwhite);border-radius:10px;padding:14px 16px;margin-bottom:9px;}
+    .resp-card:last-child{margin-bottom:0;}
+    .resp-lbl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);margin-bottom:5px;}
+    .resp-txt{font-size:.84rem;color:var(--text);line-height:1.68;}
+    .obj-ai-block{margin-top:13px;padding-top:13px;border-top:1px solid var(--border);}
+    .obj-ai-lbl{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:7px;}
+    .obj-prompt-txt{background:var(--sky-light);border:1px dashed var(--sky);border-radius:8px;padding:11px 14px;font-size:.81rem;color:var(--text);line-height:1.65;margin-bottom:8px;}
+    .obj-copy-btn{background:var(--navy);color:#fff;border:none;border-radius:7px;padding:7px 16px;font-family:'Alta',sans-serif;font-size:.77rem;cursor:pointer;transition:background .2s;}
+    .obj-copy-btn:hover{background:var(--navy-light);}
+
+    /* ── BEST PRACTICES ───────────────────────── */
+    .tips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:18px;}
+    .tip-card{background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:22px;transition:all .25s;}
+    .tip-card:hover{box-shadow:var(--shadow);transform:translateY(-2px);}
+    .tip-icon{font-size:1.75rem;margin-bottom:12px;display:block;}
+    .tip-title{font-family:'Playfair Display',serif;font-size:.93rem;color:var(--navy);margin-bottom:7px;}
+    .tip-txt{font-size:.81rem;color:var(--muted);line-height:1.65;}
+
+    /* ── SEARCH RESULTS ───────────────────────── */
+    #srSection{display:none;}
+    #srGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:18px;margin-top:20px;}
+    .back-btn{background:var(--offwhite);border:1px solid var(--border);padding:7px 16px;border-radius:8px;cursor:pointer;font-family:'Alta',sans-serif;font-size:.8rem;color:var(--navy);margin-top:8px;}
+
+    /* ── TOAST ────────────────────────────────── */
+    .toast{position:fixed;bottom:28px;right:28px;background:var(--navy);color:#fff;padding:11px 18px;border-radius:10px;font-size:.83rem;display:flex;align-items:center;gap:8px;box-shadow:var(--shadow-lg);transform:translateY(80px);opacity:0;transition:all .3s;z-index:2000;}
+    .toast.show{transform:translateY(0);opacity:1;}
+    .toast .tc{color:var(--lime);font-size:1rem;}
+
+    /* ── MOBILE ───────────────────────────────── */
+    .mob-hdr{display:none;position:fixed;top:0;left:0;right:0;background:var(--navy);z-index:99;padding:13px 18px;align-items:center;justify-content:space-between;}
+    .hamburger{background:none;border:none;color:#fff;font-size:1.4rem;cursor:pointer;}
+    .mob-logo{font-family:'Playfair Display',serif;color:#fff;font-size:.95rem;}
+    .mob-logo span{color:var(--lime);}
+    .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:98;}
+    .sb-overlay.show{display:block;}
+    @media(max-width:900px){
+      .sidebar{transform:translateX(-100%);}
+      .sidebar.open{transform:translateX(0);}
+      .main{margin-left:0;padding-top:58px;}
+      .mob-hdr{display:flex;}
+      .hero{padding:38px 22px 36px;}
+      .hero h1{font-size:2rem;}
+      .sec{padding:36px 22px;}
+      .tier-grid{grid-template-columns:1fr;}
+      .tf-grid{grid-template-columns:1fr;}
+      .tab-btn{font-size:.76rem;padding:7px 11px;}
+    }
+
+    /* ── COPILOT BANNER ───────────────────────── */
+    .copilot-bar{background:linear-gradient(90deg,var(--navy-light),var(--navy-mid));border-bottom:1px solid rgba(255,255,255,.08);padding:10px 48px;display:flex;align-items:center;gap:12px;}
+    .copilot-bar .cp-ic{font-size:1.1rem;}
+    .copilot-bar p{color:var(--sky);font-size:.8rem;line-height:1.5;}
+    .copilot-bar strong{color:#fff;}
+    .copilot-bar a{color:var(--lime);text-decoration:none;font-weight:700;}
+    @media(max-width:900px){.copilot-bar{padding:10px 22px;}}
+
+    /* ── SECTION ANCHOR OFFSET ────────────────── */
+    .sec-anchor{display:block;height:0;visibility:hidden;margin-top:-20px;}
+  </style>
+</head>
+<body>
+
+<!-- Toast -->
+<div class="toast" id="toast"><span class="tc">✓</span><span id="toastMsg">Copied!</span></div>
+
+<!-- Modal -->
+<div class="overlay" id="overlay" onclick="overlayClick(event)">
+  <div class="modal" id="modal">
+    <button class="modal-x" onclick="closeModal()">×</button>
+    <h2 id="mTitle"></h2>
+    <p class="modal-sub">Fill in the highlighted fields to personalize your prompt, then copy and paste into Copilot or your AI tool.</p>
+    <div class="m-prompt" id="mDisplay"></div>
+    <div class="m-fields" id="mFields"></div>
+    <div class="m-actions">
+      <button class="btn-navy" onclick="copyModal()">📋 Copy Prompt</button>
+      <button class="btn-lime" onclick="closeModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile Header -->
+<div class="mob-hdr">
+  <button class="hamburger" onclick="toggleSidebar()">☰</button>
+  <span class="mob-logo">AI <span>Training Hub</span></span>
+  <span style="width:32px"></span>
+</div>
+<div class="sb-overlay" id="sbOverlay" onclick="toggleSidebar()"></div>
+
+<!-- Sidebar -->
+<nav class="sidebar" id="sidebar">
+  <div class="sb-logo">
+    <h1>AI Training <span>Hub</span></h1>
+    <p>Home Health Sales</p>
+  </div>
+  <div class="sb-nav">
+    <div class="nav-lbl">Navigation</div>
+    <a class="nav-a active" onclick="goTo('home')"><span class="ic">🏠</span>Overview</a>
+    <a class="nav-a" onclick="goTo('prompts')"><span class="ic">💬</span>Prompt Library</a>
+    <a class="nav-a" onclick="goTo('workflow')"><span class="ic">📅</span>Daily Workflow</a>
+    <a class="nav-a" onclick="goTo('calculators')"><span class="ic">📊</span>Calculators</a>
+    <a class="nav-a" onclick="goTo('tiering')"><span class="ic">🏆</span>Account Tiering</a>
+    <a class="nav-a" onclick="goTo('objections')"><span class="ic">🛡️</span>Objection Handling</a>
+    <a class="nav-a" onclick="goTo('tips')"><span class="ic">💡</span>Best Practices</a>
+  </div>
+  <div class="sb-foot">
+    <div class="sb-tip">
+      <p><strong>💡 Pro Tip:</strong> Click any prompt card, fill in your details, and copy it straight into Microsoft Copilot or any AI tool.</p>
+    </div>
+  </div>
+</nav>
+
+<!-- Main -->
+<main class="main">
+
+  <!-- Copilot Banner -->
+  <div class="copilot-bar">
+    <span class="cp-ic">🤖</span>
+    <p><strong>Using Microsoft Copilot?</strong> Open Copilot in Teams or at <a href="#">copilot.microsoft.com</a>, paste any prompt below, and hit Enter. All prompts are ready to use as-is or customize them first.</p>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="hero-badge">✦ AI-Powered Sales Training</div>
+    <h1>Work <em>Smarter,</em><br>Sell Better.</h1>
+    <p>Your complete AI training hub - built for home health sales reps. Find the right prompt, personalize it for your accounts, and use it in Microsoft Copilot or any AI tool to save time every single day.</p>
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="Search prompts - try 'objection' or 'pre-call'..." oninput="liveSearch(this.value)">
+      <button class="search-btn" onclick="liveSearch(document.getElementById('searchInput').value)">Search</button>
+    </div>
+    <div class="hero-stats">
+      <div class="h-stat"><div class="n">40+</div><div class="l">Ready-to-Use Prompts</div></div>
+      <div class="h-stat"><div class="n">3</div><div class="l">Built-in Calculators</div></div>
+      <div class="h-stat"><div class="n">8</div><div class="l">Training Categories</div></div>
+      <div class="h-stat"><div class="n">Copilot</div><div class="l">Work-Approved AI Tool</div></div>
+    </div>
+  </section>
+
+  <!-- Search Results -->
+  <section class="sec" id="srSection">
+    <div class="sec-lbl">Search Results</div>
+    <h2 class="sec-title" id="srTitle">Results for "..."</h2>
+    <button class="back-btn" onclick="clearSearch()">← Back to All Prompts</button>
+    <div id="srGrid"></div>
+  </section>
+
+  <!-- Prompt Library -->
+  <span class="sec-anchor" id="prompts"></span>
+  <section class="sec" id="promptSec">
+    <div class="sec-lbl">Prompt Library</div>
+    <h2 class="sec-title">AI Prompts for Every Situation</h2>
+    <p class="sec-desc">Click any card to customize it with your account details, then copy straight into Copilot. All prompts include fill-in-the-blank fields so you never start from scratch.</p>
+    <div class="tabs" id="promptTabs">
+      <button class="tab-btn active" onclick="switchTab('cr')">🗺️ Call Routing</button>
+      <button class="tab-btn" onclick="switchTab('mi')">📈 Market Insights</button>
+      <button class="tab-btn" onclick="switchTab('as')">🎯 Account Strategy</button>
+      <button class="tab-btn" onclick="switchTab('pc')">📋 Pre-Call Planning</button>
+      <button class="tab-btn" onclick="switchTab('et')">✉️ Email Templates</button>
+      <button class="tab-btn" onclick="switchTab('dp')">💰 Data & Projections</button>
+      <button class="tab-btn" onclick="switchTab('tm')">⏰ Time Management</button>
+      <button class="tab-btn" onclick="switchTab('mt')">🔍 Market Trends</button>
+    </div>
+    <div id="tab-cr" class="tab-pane active"></div>
+    <div id="tab-mi" class="tab-pane"></div>
+    <div id="tab-as" class="tab-pane"></div>
+    <div id="tab-pc" class="tab-pane"></div>
+    <div id="tab-et" class="tab-pane"></div>
+    <div id="tab-dp" class="tab-pane"></div>
+    <div id="tab-tm" class="tab-pane"></div>
+    <div id="tab-mt" class="tab-pane"></div>
+  </section>
+
+  <!-- Daily Workflow -->
+  <span class="sec-anchor" id="workflow"></span>
+  <section class="sec" id="workflowSec">
+    <div class="sec-lbl">Daily Workflow</div>
+    <h2 class="sec-title">Your Ideal Sales Day, Hour by Hour</h2>
+    <p class="sec-desc">Use this as your daily blueprint. Each block includes what to do and the exact Copilot prompt to power through it faster.</p>
+    <div class="timeline" id="timelineContainer"></div>
+  </section>
+
+  <!-- Calculators -->
+  <span class="sec-anchor" id="calculators"></span>
+  <section class="sec" id="calcSec">
+    <div class="sec-lbl">Calculators</div>
+    <h2 class="sec-title">Know Your Numbers</h2>
+    <p class="sec-desc">Use these tools to track your performance, understand your run rate, and know exactly what you need to hit your goal every month.</p>
+    <div class="calc-grid">
+
+      <!-- Conversion Rate -->
+      <div class="calc-card">
+        <div class="calc-icon">📊</div>
+        <div class="calc-title">Conversion Rate Calculator</div>
+        <div class="calc-desc">Calculate what percentage of referrals are converting to admissions - and understand where to focus follow-up efforts.</div>
+        <div class="c-fields">
+          <div class="c-field"><label>Total Referrals This Month</label><input type="number" id="cr_ref" placeholder="e.g. 40" oninput="calcConversion()"></div>
+          <div class="c-field"><label>Total Admissions This Month</label><input type="number" id="cr_adm" placeholder="e.g. 28" oninput="calcConversion()"></div>
+        </div>
+        <div class="c-result" id="cr_result">
+          <div class="r-val" id="cr_rate">-</div>
+          <div class="r-lbl">Conversion Rate</div>
+          <div class="r-detail" id="cr_detail"></div>
+        </div>
+      </div>
+
+      <!-- Monthly Projection -->
+      <div class="calc-card">
+        <div class="calc-icon">📅</div>
+        <div class="calc-title">Monthly Projection</div>
+        <div class="calc-desc">See where you'll land at month-end based on your current pace - and what you need to hit your goal.</div>
+        <div class="c-fields">
+          <div class="c-field"><label>Admissions So Far This Month</label><input type="number" id="mp_adm" placeholder="e.g. 14" oninput="calcProjection()"></div>
+          <div class="c-field"><label>Working Days Completed</label><input type="number" id="mp_days" placeholder="e.g. 10" oninput="calcProjection()"></div>
+          <div class="c-field"><label>Total Working Days in Month</label><input type="number" id="mp_total" placeholder="e.g. 22" oninput="calcProjection()"></div>
+          <div class="c-field"><label>Monthly Goal (Admissions)</label><input type="number" id="mp_goal" placeholder="e.g. 30" oninput="calcProjection()"></div>
+        </div>
+        <div class="c-result" id="mp_result">
+          <div class="r-val" id="mp_proj">-</div>
+          <div class="r-lbl">Projected Month-End</div>
+          <div class="r-detail" id="mp_detail"></div>
+        </div>
+      </div>
+
+      <!-- Budget & Goal Tracker -->
+      <div class="calc-card">
+        <div class="calc-icon">🎯</div>
+        <div class="calc-title">Budget & Goal Tracker</div>
+        <div class="calc-desc">Understand your gap to budget, your admission-to-revenue value, and what you need per week to close the gap.</div>
+        <div class="c-fields">
+          <div class="c-field"><label>Monthly Budget (Admissions)</label><input type="number" id="bg_budget" placeholder="e.g. 30" oninput="calcBudget()"></div>
+          <div class="c-field"><label>Admissions This Month (Actual)</label><input type="number" id="bg_actual" placeholder="e.g. 18" oninput="calcBudget()"></div>
+          <div class="c-field"><label>Working Weeks Left in Month</label><input type="number" id="bg_weeks" placeholder="e.g. 2" oninput="calcBudget()"></div>
+        </div>
+        <div class="c-result" id="bg_result">
+          <div class="r-val" id="bg_gap">-</div>
+          <div class="r-lbl">Admissions Needed to Hit Budget</div>
+          <div class="r-detail" id="bg_detail"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Account Tiering -->
+  <span class="sec-anchor" id="tiering"></span>
+  <section class="sec" id="tierSec">
+    <div class="sec-lbl">Account Tiering</div>
+    <h2 class="sec-title">Know Your Accounts, Prioritize Your Time</h2>
+    <p class="sec-desc">Not all accounts are equal. Use this tiering system to invest your time where it creates the most impact - and use the tool below to rate any account instantly.</p>
+    <div class="tier-grid">
+      <div class="tier-card tc-a">
+        <div class="t-badge">A</div>
+        <div class="t-name">Tier A - High Priority</div>
+        <div class="t-freq">Visit weekly · Call between visits</div>
+        <ul class="t-crit">
+          <li>5+ referrals per month</li>
+          <li>Consistent, high-quality referral pattern</li>
+          <li>Strong physician or DC relationship</li>
+          <li>Multiple referral contacts in account</li>
+          <li>Open to partnership/program building</li>
+          <li>High patient volume or census</li>
+        </ul>
+      </div>
+      <div class="tier-card tc-b">
+        <div class="t-badge">B</div>
+        <div class="t-name">Tier B - Growth Potential</div>
+        <div class="t-freq">Visit every 2 weeks · Regular follow-up</div>
+        <ul class="t-crit">
+          <li>2–4 referrals per month</li>
+          <li>Inconsistent or declining volume</li>
+          <li>Relationship is warm but not deep</li>
+          <li>Some barriers (competing agency, etc.)</li>
+          <li>High upside if relationship strengthens</li>
+          <li>Active opportunity to grow share</li>
+        </ul>
+      </div>
+      <div class="tier-card tc-c">
+        <div class="t-badge">C</div>
+        <div class="t-name">Tier C - Maintenance</div>
+        <div class="t-freq">Visit monthly · Touch base quarterly</div>
+        <ul class="t-crit">
+          <li>0–1 referrals per month</li>
+          <li>Low patient volume or census</li>
+          <li>Weak or new relationship</li>
+          <li>Heavy competitor penetration</li>
+          <li>Maintain presence, watch for shifts</li>
+          <li>Re-evaluate quarterly</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tier-calc-box">
+      <h3>Account Tier Calculator</h3>
+      <p>Enter an account's details below to get an instant tier rating and recommended action plan.</p>
+      <div class="tf-grid">
+        <div class="tf-field"><label>Account Name</label><input type="text" id="tc_name" placeholder="e.g. Dr. Smith's Office"></div>
+        <div class="tf-field"><label>Account Type</label>
+          <select id="tc_type">
+            <option value="">Select type...</option>
+            <option>Physician Office</option>
+            <option>Hospital</option>
+            <option>SNF / Rehab Facility</option>
+            <option>Assisted Living</option>
+            <option>Discharge Planner</option>
+            <option>Specialist Office</option>
+          </select>
+        </div>
+        <div class="tf-field"><label>Avg Monthly Referrals</label><input type="number" id="tc_refs" placeholder="e.g. 4" min="0"></div>
+        <div class="tf-field"><label>Relationship Strength</label>
+          <select id="tc_rel">
+            <option value="">Select...</option>
+            <option value="3">Strong - they know me well</option>
+            <option value="2">Warm - recognize me</option>
+            <option value="1">Cold - new or lapsed</option>
+          </select>
+        </div>
+        <div class="tf-field"><label>Growth Potential</label>
+          <select id="tc_growth">
+            <option value="">Select...</option>
+            <option value="3">High - lots of room to grow</option>
+            <option value="2">Medium - some opportunity</option>
+            <option value="1">Low - maxed out or competitor-locked</option>
+          </select>
+        </div>
+        <div class="tf-field"><label>Patient Volume / Census</label>
+          <select id="tc_vol">
+            <option value="">Select...</option>
+            <option value="3">High (large practice or facility)</option>
+            <option value="2">Medium</option>
+            <option value="1">Low (small practice)</option>
+          </select>
+        </div>
+      </div>
+      <button class="calc-btn" style="max-width:220px;" onclick="calcTier()">Calculate Tier →</button>
+      <div class="tr-result" id="tr_result">
+        <div class="tr-head">
+          <div class="tr-letter" id="tr_letter">A</div>
+          <div class="tr-info">
+            <h4 id="tr_acctname">Account Name</h4>
+            <p id="tr_tierline">Tier A - High Priority Account</p>
+          </div>
+        </div>
+        <ul class="tr-recs" id="tr_recs"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Objection Handling -->
+  <span class="sec-anchor" id="objections"></span>
+  <section class="sec" id="objSec">
+    <div class="sec-lbl">Objection Handling</div>
+    <h2 class="sec-title">Turn "No" into a Next Step</h2>
+    <p class="sec-desc">Every objection is an opportunity. Use the ready-made responses below, or grab the Copilot prompt to generate custom responses for your exact situation.</p>
+    <div class="obj-list" id="objList"></div>
+  </section>
+
+  <!-- Best Practices -->
+  <span class="sec-anchor" id="tips"></span>
+  <section class="sec" id="tipsSec">
+    <div class="sec-lbl">Best Practices</div>
+    <h2 class="sec-title">Working Smarter with AI</h2>
+    <p class="sec-desc">These simple habits will help you get more out of AI tools every day - no tech background required.</p>
+    <div class="tips-grid" id="tipsGrid"></div>
+  </section>
+
+</main>
+
+<script>
+/* ═══════════════════════════════════════════════
+   PROMPT DATA
+═══════════════════════════════════════════════ */
+const prompts = [
+  // ── CALL ROUTING ──
+  {id:1,cat:'cr',tag:'Call Routing',title:'Daily Stop Planner',
+   text:'I am building my route for today, [DAY AND DATE]. Here are the accounts I am planning to stop at:\n[LIST ACCOUNT NAMES, THEIR LOCATIONS OR INTERSECTIONS, AND ACCOUNT TIER IF KNOWN]\nI am starting from [YOUR STARTING LOCATION OR FIRST STOP]. Help me: 1) Sequence these stops geographically to minimize drive time and backtracking, 2) Flag which stops deserve the most face time based on tier or opportunity, and 3) Suggest a realistic time budget per stop so I can stay on track all day.',
+   phs:['DAY AND DATE','LIST ACCOUNT NAMES, THEIR LOCATIONS OR INTERSECTIONS, AND ACCOUNT TIER IF KNOWN','YOUR STARTING LOCATION OR FIRST STOP']},
+  {id:2,cat:'cr',tag:'Call Routing',title:'Weekly Territory Route Builder',
+   text:'Help me plan my account stops for the week of [WEEK OF DATE]. Here are all the accounts I need to cover this week and their tiers:\n[LIST ACCOUNTS WITH TIER - A, B, OR C - AND GENERAL LOCATION]\nI have [NUMBER OF FIELD DAYS] days in the field. My territory covers [GENERAL AREA OR REGION]. Build me a day-by-day route plan that: clusters stops by geography each day, leads with Tier A accounts in the morning, and ensures I am hitting every account at the right frequency for its tier.',
+   phs:['WEEK OF DATE','LIST ACCOUNTS WITH TIER - A, B, OR C - AND GENERAL LOCATION','NUMBER OF FIELD DAYS','GENERAL AREA OR REGION']},
+  {id:3,cat:'cr',tag:'Call Routing',title:'Priority Stop Identifier',
+   text:'I need help deciding which accounts to prioritize for my stops this week. Here is what I am working with:\n[LIST YOUR ACCOUNTS WITH ANY RELEVANT NOTES - last visit date, referral volume trend, any flags like a lapsed account, a competitor showing up, or a new contact]\nBased on this, help me: 1) Identify the top 5 accounts I absolutely must visit this week and why, 2) Flag any accounts that are at risk and need urgent face time, and 3) Tell me what my specific goal should be at each priority stop.',
+   phs:['LIST YOUR ACCOUNTS WITH ANY RELEVANT NOTES - last visit date, referral volume trend, any flags like a lapsed account, a competitor showing up, or a new contact']},
+  {id:4,cat:'cr',tag:'Call Routing',title:'Mid-Week Route Adjuster',
+   text:'My week got disrupted. Here is what I planned versus what actually happened:\nPlanned stops: [LIST WHAT YOU INTENDED TO VISIT]\nCompleted stops: [LIST WHAT YOU ACTUALLY HIT SO FAR]\nRemaining days: [HOW MANY DAYS LEFT AND ANY TIME CONSTRAINTS]\nHigh-priority items still outstanding: [ACCOUNTS, PENDING REFERRALS, OR FOLLOW-UPS]\nHelp me rebuild the rest of my week. Tell me which remaining stops are non-negotiable, how to sequence the rest efficiently, and what I can safely push to next week without losing ground.',
+   phs:['LIST WHAT YOU INTENDED TO VISIT','LIST WHAT YOU ACTUALLY HIT SO FAR','HOW MANY DAYS LEFT AND ANY TIME CONSTRAINTS','ACCOUNTS, PENDING REFERRALS, OR FOLLOW-UPS']},
+  {id:5,cat:'cr',tag:'Call Routing',title:'Territory Coverage Audit',
+   text:'I want to audit how well I am covering my territory. Here is a list of my accounts and when I last visited each one:\n[LIST ACCOUNT NAME, TIER, AND LAST VISIT DATE]\nMy territory includes approximately [TOTAL NUMBER] accounts across [GEOGRAPHIC AREA]. Help me: 1) Identify any accounts I am visiting too infrequently based on their tier, 2) Flag any accounts that have gone cold due to a long gap since my last stop, 3) Recommend a sustainable visit cadence for the next 30 days that ensures full territory coverage without burning me out.',
+   phs:['LIST ACCOUNT NAME, TIER, AND LAST VISIT DATE','TOTAL NUMBER','GEOGRAPHIC AREA']},
+
+  // ── MARKET INSIGHTS ──
+  {id:6,cat:'mi',tag:'Market Insights',title:'Territory Overview Analysis',
+   text:'I am a home health sales rep covering [TERRITORY - city, county, or zip codes]. My top 3 referral sources right now are [SOURCE 1], [SOURCE 2], and [SOURCE 3]. I am averaging [X] admissions per month. My biggest competitor in this territory is [COMPETITOR NAME]. Based on this, help me: 1) Identify my biggest growth opportunities, 2) Flag any market risks I should watch, and 3) Suggest 3 specific actions I can take this month to gain market share.',
+   phs:['TERRITORY','SOURCE 1','SOURCE 2','SOURCE 3','X','COMPETITOR NAME']},
+  {id:7,cat:'mi',tag:'Market Insights',title:'Referral Source Trend Analysis',
+   text:'Here is my referral data for the past 3 months:\n[PASTE OR DESCRIBE YOUR DATA - account name, referrals per month]\nHelp me identify: 1) Which accounts are trending up or down, 2) Which accounts I may be losing ground at, and 3) Where I should focus my next two weeks of visits based on this data.',
+   phs:['PASTE OR DESCRIBE YOUR DATA']},
+  {id:8,cat:'mi',tag:'Market Insights',title:'Competitive Landscape Assessment',
+   text:'My main competitors in [TERRITORY] are [COMPETITOR 1] and [COMPETITOR 2]. I know that [COMPETITOR 1] is strong at [FACILITY OR ACCOUNT TYPE] and [COMPETITOR 2] has a strong relationship with [TYPE OF REFERRAL SOURCE]. Help me build a brief competitive overview and identify 3 gaps I can exploit to win more referrals away from these agencies.',
+   phs:['TERRITORY','COMPETITOR 1','COMPETITOR 2','FACILITY OR ACCOUNT TYPE','TYPE OF REFERRAL SOURCE']},
+  {id:9,cat:'mi',tag:'Market Insights',title:'Market Gap Finder',
+   text:'I cover [TERRITORY]. My current referral mix is mostly from [CURRENT SOURCE TYPES - e.g., physician offices, SNFs]. I am not getting much from [UNDERSERVED SOURCE TYPE - e.g., assisted living, specialists]. Help me build a quick market gap analysis: 1) Why am I likely missing these accounts, 2) What is my pitch to them, and 3) What is a realistic 30-day action plan to start breaking in?',
+   phs:['TERRITORY','CURRENT SOURCE TYPES','UNDERSERVED SOURCE TYPE']},
+  {id:10,cat:'mi',tag:'Market Insights',title:'Growth Opportunity Spotter',
+   text:'I have [X] accounts in my territory. My current market share at my top accounts is approximately [ESTIMATED %]. I have been in this territory for [TIME PERIOD]. Help me think through: 1) What are the highest-probability ways to grow volume in the next 60 days, 2) Are there account types I may be ignoring that could be quick wins, and 3) What is one bold move I could make to meaningfully shift my numbers this quarter?',
+   phs:['X','ESTIMATED %','TIME PERIOD']},
+
+  // ── ACCOUNT STRATEGY ──
+  {id:11,cat:'as',tag:'Account Strategy',title:'New Account Penetration Plan',
+   text:'I want to break into [ACCOUNT NAME], a [ACCOUNT TYPE] in [LOCATION]. I have never called on them before. What I know about them: [WHAT YOU KNOW - size, key staff, any intel]. Build me a 4-week penetration plan with specific actions, talking points for the first visit, and a leave-behind strategy.',
+   phs:['ACCOUNT NAME','ACCOUNT TYPE','LOCATION','WHAT YOU KNOW']},
+  {id:12,cat:'as',tag:'Account Strategy',title:'Growing a Warm Account',
+   text:'[ACCOUNT NAME] is a [ACCOUNT TYPE] that currently sends me about [X] referrals per month. I have a good relationship with [CONTACT NAME/ROLE]. I believe there is more volume available. Help me build a strategy to grow my share at this account, including what to say on my next visit, what value-adds I can offer, and how to ask for more referrals without seeming pushy.',
+   phs:['ACCOUNT NAME','ACCOUNT TYPE','X','CONTACT NAME/ROLE']},
+  {id:13,cat:'as',tag:'Account Strategy',title:'Re-engaging a Lapsed Account',
+   text:'[ACCOUNT NAME] used to refer to us regularly but has not sent a referral in [TIME PERIOD]. The last time I visited was [DATE OR TIMEFRAME]. I believe the reason may be [YOUR GUESS - competitor, staff change, service issue]. Help me: 1) Draft a re-engagement visit plan, 2) Build a conversation opener that is natural and non-awkward, and 3) Identify what I should bring or offer to get back in the door.',
+   phs:['ACCOUNT NAME','TIME PERIOD','DATE OR TIMEFRAME','YOUR GUESS']},
+  {id:14,cat:'as',tag:'Account Strategy',title:'Protecting an At-Risk Account',
+   text:'I am concerned about losing [ACCOUNT NAME]. Signs I am seeing: [DESCRIBE - fewer referrals, staff are less warm, competitor is visiting more, etc.]. Help me build a defensive strategy: 1) What might be driving this, 2) What do I need to say or do on my next visit to stabilize the relationship, and 3) What long-term actions protect my share here?',
+   phs:['ACCOUNT NAME','DESCRIBE']},
+  {id:15,cat:'as',tag:'Account Strategy',title:'Weekly Territory Routing Optimizer',
+   text:'Here are the accounts I need to visit this week:\n[LIST YOUR ACCOUNTS AND THEIR LOCATIONS]\nI am based in [YOUR STARTING LOCATION] and I want to minimize drive time. Help me: 1) Build an efficient daily route grouped by geography, 2) Prioritize accounts by tier (A/B/C) based on what I tell you, and 3) Flag any accounts that need a special focus this week based on the notes I share.',
+   phs:['LIST YOUR ACCOUNTS AND THEIR LOCATIONS','YOUR STARTING LOCATION']},
+
+  // ── PRE-CALL PLANNING ──
+  {id:16,cat:'pc',tag:'Pre-Call Planning',title:'Full Pre-Call Plan Generator',
+   text:'I am visiting [ACCOUNT NAME], a [ACCOUNT TYPE], tomorrow. My contact there is [CONTACT NAME], [THEIR TITLE]. Recent history: they referred [X] patients last month, which is [up/down/flat] from the month before. Last visit notes: [WHAT YOU DISCUSSED OR OBSERVED LAST TIME]. My goal for tomorrow is [YOUR GOAL]. Build me a complete pre-call plan including: visit objective, 3 talking points, 2 questions to ask, and a strong closing ask.',
+   phs:['ACCOUNT NAME','ACCOUNT TYPE','CONTACT NAME','THEIR TITLE','X','up/down/flat','WHAT YOU DISCUSSED OR OBSERVED LAST TIME','YOUR GOAL']},
+  {id:17,cat:'pc',tag:'Pre-Call Planning',title:'Quick Visit Goal Setter',
+   text:'I have 15 minutes before I walk into [ACCOUNT NAME]. My relationship with them is [strong/warm/cold]. Last referral from them was [TIMEFRAME]. What is the single most important thing I should try to accomplish on this visit, and what is the best way to open the conversation naturally?',
+   phs:['ACCOUNT NAME','strong/warm/cold','TIMEFRAME']},
+  {id:18,cat:'pc',tag:'Pre-Call Planning',title:'Conversation Opener Builder',
+   text:'I am about to visit [CONTACT NAME] at [ACCOUNT NAME]. The last time I saw them, we talked about [PREVIOUS TOPIC]. They seemed [THEIR MOOD/ATTITUDE]. I want to open the conversation in a way that feels natural, builds rapport, and leads into a conversation about referrals without feeling forced. Write me 3 different conversation openers I can choose from.',
+   phs:['CONTACT NAME','ACCOUNT NAME','PREVIOUS TOPIC','THEIR MOOD/ATTITUDE']},
+  {id:19,cat:'pc',tag:'Pre-Call Planning',title:'Post-Visit Action Plan',
+   text:'I just finished a visit at [ACCOUNT NAME]. Here is what happened: [SUMMARIZE THE VISIT - what was said, how it went, any commitments made]. Based on this, tell me: 1) The 3 most important follow-up actions and deadlines, 2) What I should document in my CRM or notes, and 3) What my next visit goal should be.',
+   phs:['ACCOUNT NAME','SUMMARIZE THE VISIT']},
+  {id:20,cat:'pc',tag:'Pre-Call Planning',title:'Next-Day Stop Planner',
+   text:'Tomorrow I am planning to visit these accounts: [LIST ACCOUNTS]. For each one, I want to walk in with a clear purpose. Here is what I know about each: [BRIEF NOTES PER ACCOUNT]. Help me build a quick one-line visit goal for each account and identify any prep I need to do tonight.',
+   phs:['LIST ACCOUNTS','BRIEF NOTES PER ACCOUNT']},
+
+  // ── EMAIL TEMPLATES ──
+  {id:21,cat:'et',tag:'Email Templates',title:'Introduction to New Referral Source',
+   text:'Write a brief, professional introduction email to [CONTACT NAME], a [THEIR ROLE] at [FACILITY/PRACTICE NAME]. I am a home health sales rep with [AGENCY NAME]. I want to introduce myself, share one or two things that differentiate us, and request a short 10-minute meeting. Keep it warm and conversational - not salesy. Make it easy to say yes.',
+   phs:['CONTACT NAME','THEIR ROLE','FACILITY/PRACTICE NAME','AGENCY NAME']},
+  {id:22,cat:'et',tag:'Email Templates',title:'Post-Visit Follow-Up',
+   text:'I just visited [CONTACT NAME] at [ACCOUNT NAME] and we discussed [WHAT WAS DISCUSSED]. Write a short follow-up email that: 1) Thanks them for their time, 2) Recaps any commitments I made, 3) Includes one helpful piece of information we discussed, and 4) Includes a soft next-step ask. Keep it under 150 words and easy to skim.',
+   phs:['CONTACT NAME','ACCOUNT NAME','WHAT WAS DISCUSSED']},
+  {id:23,cat:'et',tag:'Email Templates',title:'Thank You for the Referral',
+   text:'[CONTACT NAME] at [ACCOUNT NAME] just referred a patient to us. Write a warm thank-you email that: acknowledges the referral, reinforces my commitment to taking great care of their patient, includes a brief status update or process note if appropriate, and leaves the door open for future referrals. Keep it genuine, not templated.',
+   phs:['CONTACT NAME','ACCOUNT NAME']},
+  {id:24,cat:'et',tag:'Email Templates',title:'Re-Engagement Email',
+   text:'[CONTACT NAME] at [ACCOUNT NAME] has not sent us a referral in [TIMEFRAME]. We previously had a good relationship. Write a re-engagement email that: acknowledges the gap without making it awkward, reminds them of our value, and offers something new or relevant - such as [A NEW SERVICE, PROGRAM, OR RESOURCE]. Keep the tone warm and low-pressure.',
+   phs:['CONTACT NAME','ACCOUNT NAME','TIMEFRAME','A NEW SERVICE, PROGRAM, OR RESOURCE']},
+  {id:25,cat:'et',tag:'Email Templates',title:'Pending Referral Status Email',
+   text:'I have a pending referral from [ACCOUNT NAME] that has been in process for [TIMEFRAME]. The patient is [BRIEF DESCRIPTION - diagnosis, situation]. Write a professional email to the referral source giving a brief status update, explaining what is happening, and reassuring them their patient is being taken care of. Offer a phone call if they have questions.',
+   phs:['ACCOUNT NAME','TIMEFRAME','BRIEF DESCRIPTION']},
+
+  // ── DATA & PROJECTIONS ──
+  {id:26,cat:'dp',tag:'Data & Projections',title:'Monthly Projection Interpreter',
+   text:'Here are my current numbers: I am on day [X] of [TOTAL WORKING DAYS] working days this month. I have [ADMISSIONS SO FAR] admissions and my goal is [MONTHLY GOAL]. My conversion rate is [CONVERSION RATE]%. Based on this, explain: 1) Am I on pace, ahead, or behind? 2) What is my projected month-end number? 3) What do I need to do in the remaining days to hit or exceed my goal? Give me specific, actionable guidance.',
+   phs:['X','TOTAL WORKING DAYS','ADMISSIONS SO FAR','MONTHLY GOAL','CONVERSION RATE']},
+  {id:27,cat:'dp',tag:'Data & Projections',title:'Conversion Rate Breakdown',
+   text:'This month I have had [TOTAL REFERRALS] referrals and [ADMISSIONS] have been admitted. My pending referrals number [PENDING]. Help me: 1) Calculate my current conversion rate, 2) Identify what a healthy conversion rate looks like for a home health territory, 3) Diagnose where in the process I may be losing referrals, and 4) Give me 3 concrete actions to improve conversion.',
+   phs:['TOTAL REFERRALS','ADMISSIONS','PENDING']},
+  {id:28,cat:'dp',tag:'Data & Projections',title:'Budget Gap Action Plan',
+   text:'My monthly budget is [BUDGET] admissions. I am currently at [ACTUAL] admissions with [WEEKS LEFT] weeks left in the month. That is a gap of [GAP]. Help me build a realistic action plan to close this gap. Include: which account types to prioritize, how many visits I need to make, and what specific asks will move the needle fastest.',
+   phs:['BUDGET','ACTUAL','WEEKS LEFT','GAP']},
+  {id:29,cat:'dp',tag:'Data & Projections',title:'Pipeline Health Check',
+   text:'Here is a summary of my current pipeline: [LIST PENDING REFERRALS WITH STATUS - patient name or ID, referral source, days pending, any blockers]. Help me: 1) Identify which referrals are at risk of falling off, 2) Prioritize the top 3 I should focus on today, and 3) Write a short action for each to move them forward.',
+   phs:['LIST PENDING REFERRALS WITH STATUS']},
+  {id:30,cat:'dp',tag:'Data & Projections',title:'Run Rate vs. Goal Story',
+   text:'I want to explain my performance to my manager in our upcoming meeting. My numbers: [YOUR KEY METRICS - admissions, referrals, conversion rate, YTD vs. goal]. Help me write a concise, confident 3–4 sentence performance narrative that: highlights my strengths, acknowledges any gaps honestly, and shows I have a plan to close them.',
+   phs:['YOUR KEY METRICS']},
+
+  // ── TIME MANAGEMENT ──
+  {id:31,cat:'tm',tag:'Time Management',title:'Daily Schedule Optimizer',
+   text:'Here is everything I need to get done today: [LIST YOUR TASKS - visits, calls, emails, admin, pending referrals to work]. I have from [START TIME] to [END TIME] available. Help me build a realistic time-blocked schedule that prioritizes income-generating activities first, batches similar tasks together, and builds in travel time between visits.',
+   phs:['LIST YOUR TASKS','START TIME','END TIME']},
+  {id:32,cat:'tm',tag:'Time Management',title:'Pending Referral Prioritizer',
+   text:'I currently have [X] pending referrals. Here they are with key details:\n[LIST - referral source, diagnosis, days in process, any blockers]\nHelp me rank them by priority and urgency. For the top 3, give me the specific next action I need to take and who I need to contact to move each one forward today.',
+   phs:['X','LIST']},
+  {id:33,cat:'tm',tag:'Time Management',title:'Morning Planning Kickoff',
+   text:'It is [DAY OF WEEK], [DATE]. Here is what I know about today: I have [NUMBER] accounts to visit - [ACCOUNT NAMES]. I have [X] pending referrals to work. My top priority emails to handle are [EMAIL TOPICS]. My goal for today is [YOUR GOAL]. Help me build a clear morning game plan with priorities listed in order and time estimates for each.',
+   phs:['DAY OF WEEK','DATE','NUMBER','ACCOUNT NAMES','X','EMAIL TOPICS','YOUR GOAL']},
+  {id:34,cat:'tm',tag:'Time Management',title:'Email Inbox Tackle',
+   text:'I have [X] unread emails related to work. Here is a summary of what is in my inbox: [DESCRIBE EMAILS - referral follow-ups, insurance questions, care coordination, manager asks, etc.]. Help me: 1) Categorize them by urgency (respond today vs. can wait), 2) Draft a quick response template for the most common type, and 3) Identify any that need to be escalated or delegated.',
+   phs:['X','DESCRIBE EMAILS']},
+  {id:35,cat:'tm',tag:'Time Management',title:'End-of-Day Wrap & Next Day Prep',
+   text:'It is the end of my work day. Here is a recap of what happened today: [BRIEF SUMMARY - visits made, referrals received or worked, wins, issues]. Here is what I have planned for tomorrow: [TOMORROW\'S SCHEDULE OR TASKS]. Help me: 1) Identify anything I forgot to follow up on today, 2) Confirm my priorities for tomorrow are right, and 3) Give me one quick action to do before I close my laptop.',
+   phs:['BRIEF SUMMARY','TOMORROW\'S SCHEDULE OR TASKS']},
+
+  // ── MARKET TRENDS ──
+  {id:36,cat:'mt',tag:'Market Trends',title:'Local Market Trend Analysis',
+   text:'I need to understand what is happening in my market right now. My territory is [TERRITORY]. The biggest changes I have noticed recently are: [DESCRIBE - new competitor, hospital system change, physician leaving a practice, etc.]. Help me analyze: 1) How these changes could affect my referral volume, 2) Which accounts I need to visit urgently because of these changes, and 3) Any opportunities these shifts create.',
+   phs:['TERRITORY','DESCRIBE']},
+  {id:37,cat:'mt',tag:'Market Trends',title:'Diagnosis Mix Review',
+   text:'My current patient admissions are made up of approximately: [LIST DIAGNOSIS CATEGORIES AND % - e.g., cardiac 30%, orthopedic 25%, wound care 15%, etc.]. My agency specializes in [SPECIALTY AREAS]. Help me: 1) Identify which diagnoses I may be under-capturing, 2) Which referral sources most commonly send those diagnoses, and 3) How I should shift my messaging to capture more of those patients.',
+   phs:['LIST DIAGNOSIS CATEGORIES AND %','SPECIALTY AREAS']},
+  {id:38,cat:'mt',tag:'Market Trends',title:'Payer Mix Optimization',
+   text:'My current payer mix is approximately: Medicare [X]%, Medicaid [Y]%, Commercial [Z]%, Managed Care [W]%. My agency\'s preferred payers are [LIST]. Help me identify: 1) If my payer mix is aligned with my agency\'s goals, 2) Which referral sources typically send higher-value payer mix, and 3) Any messaging adjustments I should make to attract more of the preferred payer type.',
+   phs:['X','Y','Z','W','LIST']},
+  {id:39,cat:'mt',tag:'Market Trends',title:'Seasonal Planning Prompt',
+   text:'It is currently [MONTH/SEASON]. Based on typical home health market patterns for this time of year, help me: 1) Anticipate what referral trends I should expect over the next 60 days, 2) Identify which account types get busier or slower this time of year, and 3) Build a proactive strategy so I am positioned ahead of these seasonal shifts.',
+   phs:['MONTH/SEASON']},
+  {id:40,cat:'mt',tag:'Market Trends',title:'Competitor Activity Monitor',
+   text:'I have noticed that [COMPETITOR NAME] is increasing activity in my territory. Specifically: [WHAT YOU HAVE OBSERVED - visiting my accounts more, new staff, a new service line, etc.]. Help me: 1) Assess the risk this poses to my top accounts, 2) Build a quick counter-strategy, and 3) Identify which accounts need an urgent visit to reinforce my relationship before I lose them.',
+   phs:['COMPETITOR NAME','WHAT YOU HAVE OBSERVED']}
+];
+
+/* ═══════════════════════════════════════════════
+   OBJECTION DATA
+═══════════════════════════════════════════════ */
+const objections = [
+  {
+    q:'We already have a home health company we use.',
+    responses:[
+      {lbl:'Acknowledge & Differentiate',txt:'That is great - it tells me you already see the value of home health for your patients. I am not here to replace anyone; I just want to earn the opportunity to be your second option when your go-to is full or unavailable. Can I share what makes us different in one minute?'},
+      {lbl:'Probe for Pain',txt:'Completely understand. Can I ask - are you 100% happy with the service your patients are receiving? I ask because most facilities I visit use two or three agencies just to make sure their patients always get placed quickly and get excellent care.'},
+      {lbl:'The One Referral Ask',txt:'I totally respect that. All I am asking for is one referral - give us a chance to prove ourselves. If we do not deliver, I will never bring it up again. But if we do, you will have a reliable second option for your patients.'}
+    ],
+    prompt:'A [ACCOUNT TYPE] just told me they already have a home health agency they use. They seemed [TONE - polite, dismissive, open]. Give me 3 natural, conversational responses I can use on the spot to handle this objection and move toward getting a trial referral. Keep the tone confident but not pushy.'
+  },
+  {
+    q:'We have had bad experiences with home health in the past.',
+    responses:[
+      {lbl:'Validate First',txt:'I really appreciate you telling me that - and I am sorry that happened. That is exactly why I am here: so that does not happen again with our agency. Can you tell me a little about what went wrong? I want to make sure we address it directly.'},
+      {lbl:'Own the Industry Problem',txt:'Unfortunately that story is not uncommon, and it is one of the main reasons I got into this role. Not all home health agencies are equal. What I can offer you is my personal commitment - you will have my direct number and I will be the one accountable if anything goes wrong.'},
+      {lbl:'Offer a Trial with Accountability',txt:'How about this - let us take just one patient and I will personally oversee the whole process. If anything feels off at any point, call me directly. I would rather earn your trust one patient at a time than ask you to take my word for it.'}
+    ],
+    prompt:'A referral source told me they have had bad experiences with home health agencies in the past. They seemed [THEIR TONE]. Help me respond in a way that validates their concern, differentiates us, and moves toward a trial referral without dismissing their frustration.'
+  },
+  {
+    q:'I do not have time to talk right now.',
+    responses:[
+      {lbl:'Respect and Reschedule',txt:'Absolutely - I understand completely. I only need 2 minutes, but I would rather give you my full attention when you have it. When is a better time this week - early morning or end of day tends to work for most people I visit?'},
+      {lbl:'Leave Value Before Leaving',txt:'No problem at all. Before I go, can I leave you something useful? [Hand them a resource or one quick piece of information.] I will follow up on [specific day]. Thanks for your time.'},
+      {lbl:'The Quick Win Ask',txt:'I totally get it - I will keep it to one sentence: we have same-day admission capability for your complex patients. If that ever saves you a headache, I want you to think of me. Here is my card - I will call Thursday.'}
+    ],
+    prompt:'A contact at [ACCOUNT TYPE] said they did not have time to talk. I want to leave a strong impression and schedule a real follow-up. Give me 3 short, natural responses I can deliver in under 30 seconds and still walk away with a next step.'
+  },
+  {
+    q:'Your agency is too far from our patients.',
+    responses:[
+      {lbl:'Address with Data',txt:'I hear that concern a lot, and I want to clear it up directly. We actually have [STAFF/LOCATIONS] throughout [AREA], which means your patients in [SPECIFIC AREA] are covered. In fact, I have a few current patients right in your zip code if it helps to know that.'},
+      {lbl:'Reframe the Value',txt:'Distance matters a lot less with home health than it does with outpatient - our clinicians come to the patient, not the other way around. What I can promise is that your patients will get a clinician at their door within [X] hours of referral.'},
+      {lbl:'Offer a Proof Point',txt:'Let me ask - what is the furthest location your patients typically live from here? I am willing to bet we have coverage there. Let me look it up right now and show you exactly where our clinicians are.'}
+    ],
+    prompt:'A referral source said our agency is too far from their patients. Their facility is located in [LOCATION]. Help me respond in a way that directly addresses the geographic concern with specifics, and shifts the conversation toward a referral.'
+  },
+  {
+    q:'Our patients do not really need home health.',
+    responses:[
+      {lbl:'Educate with Empathy',txt:'That is actually one of the most common misconceptions I run into. Home health is not just for post-surgical patients - we are seeing great outcomes with patients managing [chronic conditions, fall risk, medication management, wound care]. May I share a quick example of a patient who surprised their doctor with how much they benefited?'},
+      {lbl:'Ask the Clinical Question',txt:'Interesting - tell me, when you discharge patients who are struggling with [mobility, medications, wound care, chronic disease management], where do you typically send them? I want to understand what gaps you are already seeing so I can show you exactly where we fit.'},
+      {lbl:'Reframe Home Health\'s Role',txt:'Actually, home health is one of the most cost-effective tools you have to keep patients out of the ER and reduce readmissions. Studies consistently show that patients who go home with skilled nursing and therapy have significantly better 30-day outcomes. Could we spend 10 minutes walking through the criteria together?'}
+    ],
+    prompt:'A physician or discharge planner told me their patients do not need home health. Help me educate them on the value of home health services in a way that is clinical, non-pushy, and opens a conversation about specific patient types they might be overlooking.'
+  },
+  {
+    q:'We had a bad experience specifically with your agency.',
+    responses:[
+      {lbl:'Full Ownership',txt:'I am really glad you told me because I genuinely want to fix it - not just for us, but for your patients. Can you walk me through what happened? I want to make sure I understand it fully before I respond.'},
+      {lbl:'Accountability + Action',txt:'That is not okay, and I am sorry. Something like that should never happen, and I want to personally make sure it does not happen again. Here is what I can do: [specific action]. Would you be willing to give us one more chance with my personal guarantee?'},
+      {lbl:'Escalate and Follow Through',txt:'I want to be transparent - I am going to loop in my manager on this so we can do a proper service recovery. In the meantime, I am going to follow up with you by [specific date] with a resolution. Your trust matters more to me than the referral.'}
+    ],
+    prompt:'A referral source had a specific bad experience with our agency. They mentioned: [WHAT HAPPENED]. Help me respond in a way that takes full ownership, rebuilds trust, and creates a path back to a referral relationship without being defensive.'
+  }
+];
+
+/* ═══════════════════════════════════════════════
+   TIPS DATA
+═══════════════════════════════════════════════ */
+const tips = [
+  {icon:'📝',title:'Be Specific, Get Better Results',txt:'The more context you give, the better the output. Instead of "write me an email," try "write a 100-word follow-up email to a physician\'s office discharge coordinator after my first visit, thanking them and asking for one referral." Specifics = better output.'},
+  {icon:'🔄',title:'Iterate, Don\'t Redo',txt:'If the first response is not quite right, do not start over. Just say: "Good start - can you make it shorter?" or "Change the tone to be less formal" or "Add a specific ask at the end." AI remembers the conversation context.'},
+  {icon:'📋',title:'Copy the Whole Conversation',txt:'When you get a great response, copy the entire prompt AND the output into your notes or CRM. Next time you have a similar situation, you have a starting point instead of starting from scratch.'},
+  {icon:'🎯',title:'Use It for Objections in Real Time',txt:'Stuck in the car after a tough visit? Open Copilot and say: "I just got hit with this objection: [what they said]. Give me 3 responses I can use on my next call." Use AI to debrief and prepare, not just to write.'},
+  {icon:'🧠',title:'Ask for "Why" Not Just "What"',txt:'Do not just ask for a script - ask AI to explain why certain approaches work. "Why is the one-referral ask effective?" Understanding the reasoning makes you more flexible and authentic in real conversations.'},
+  {icon:'📊',title:'Use AI to Prep for Manager Meetings',txt:'Before your one-on-one, paste in your numbers and ask: "Help me build a 3-sentence performance narrative that is honest and forward-looking." Walking in prepared builds credibility and reduces stress.'},
+  {icon:'⚡',title:'Batch Your Admin Work',txt:'Use AI to power through admin in a single block. At the end of the day, spend 20 minutes with Copilot writing follow-up emails, updating account notes, and planning tomorrow - instead of spreading it across the whole day.'},
+  {icon:'🔒',title:'Keep Patient Info Private',txt:'Never include patient names, dates of birth, or identifying health information in any AI prompt. Use general descriptions like "a 78-year-old post-hip-replacement patient" rather than any real patient details. This keeps you compliant and safe.'},
+  {icon:'🗺️',title:'Use AI for Territory Strategy',txt:'Once a week, spend 10 minutes asking AI to help you think through your territory. Share your top accounts, their volumes, and your goals. Ask: "What is the smartest thing I can do in my territory this week?" You will often catch things you would have missed.'},
+  {icon:'💬',title:'Role Play Before Big Visits',txt:'Before calling on a new or difficult account, tell Copilot who you are visiting and ask it to play the role of that contact. Practice your opening, your pitch, and handling objections before you ever walk in the door.'},
+  {icon:'📈',title:'Track What Works',txt:'Keep a simple note where you save prompts that produced outputs you actually used. Over time this becomes your personal prompt library - customized to your exact style and accounts.'},
+  {icon:'🤝',title:'AI is Your Thinking Partner',txt:'The best way to use AI is not to have it do your job - it is to think out loud with it. "I am trying to figure out why my referrals are down this month - here is what I know..." Let it help you think through the problem and you will come up with better answers faster.'}
+];
+
+/* ═══════════════════════════════════════════════
+   WORKFLOW DATA
+═══════════════════════════════════════════════ */
+const workflow = [
+  {
+    time:'7:00 – 7:30 AM',cls:'g',dot:'g',
+    title:'Morning Kickoff & Planning',
+    tasks:['Review yesterday\'s pending referrals and any overnight communications','Check your CRM for any notes or flags from your team','Prioritize today\'s visits using your account tier list','Set 1–2 specific goals for the day'],
+    promptId:33
+  },
+  {
+    time:'7:30 – 8:30 AM',cls:'',dot:'',
+    title:'Email & Pending Referral Work',
+    tasks:['Respond to time-sensitive emails first (referrals, care coordination, manager)','Work your top 3 pending referrals - call, follow up, or update status','Document anything updated in your CRM before you leave the office','Draft any outreach or follow-up emails from yesterday\'s visits'],
+    promptId:34
+  },
+  {
+    time:'8:30 AM – 12:00 PM',cls:'d',dot:'d',
+    title:'Morning Sales Visits',
+    tasks:['Target Tier A and high-priority Tier B accounts in the morning when staff is freshest','Always have a specific goal for each stop - not just "to say hello"','Leave something of value at every visit (resource, data, patient story)','Complete your visit notes in the car immediately after each stop'],
+    promptId:16
+  },
+  {
+    time:'12:00 – 12:30 PM',cls:'',dot:'',
+    title:'Midday Check-In & Referral Follow-Up',
+    tasks:['Check for any new referrals received during the morning','Follow up on any pending referrals with a quick call','Review your afternoon plan - adjust based on morning outcomes','Eat! You cannot sell on empty.'],
+    promptId:32
+  },
+  {
+    time:'12:30 – 4:30 PM',cls:'d',dot:'d',
+    title:'Afternoon Sales Visits',
+    tasks:['Continue with planned stops - Tier B and C accounts in the afternoon','Use drive time between stops for quick phone follow-ups','If you finish early, make one unplanned drop-in at a high-potential account','Keep energy up - afternoon visits are often where unexpected referrals happen'],
+    promptId:15
+  },
+  {
+    time:'4:30 – 5:30 PM',cls:'g',dot:'g',
+    title:'End-of-Day Wrap-Up & Tomorrow\'s Prep',
+    tasks:['Update all visit notes and CRM entries while they are fresh','Handle any remaining emails that came in during the day','Review tomorrow\'s schedule and build your visit goals tonight','Run your numbers: where are you vs. goal? What does tomorrow need to look like?'],
+    promptId:35
+  }
+];
+
+/* ═══════════════════════════════════════════════
+   RENDER FUNCTIONS
+═══════════════════════════════════════════════ */
+function renderPromptCard(p, compact=false) {
+  return `
+    <div class="p-card" onclick="openModal(${p.id})">
+      <div class="p-tag">${p.tag}</div>
+      <div class="p-title">${p.title}</div>
+      <div class="p-preview">${p.text}</div>
+      <div class="p-actions">
+        <button class="btn-use" onclick="event.stopPropagation();openModal(${p.id})">✏️ Customize & Use</button>
+        <button class="btn-cp" id="cp-${p.id}" onclick="event.stopPropagation();quickCopy(${p.id})">📋 Copy</button>
+      </div>
+    </div>`;
+}
+
+function renderAll() {
+  const cats = ['cr','mi','as','pc','et','dp','tm','mt'];
+  cats.forEach(c => {
+    const el = document.getElementById('tab-'+c);
+    if(el) el.innerHTML = prompts.filter(p=>p.cat===c).map(p=>renderPromptCard(p)).join('');
+  });
+
+  // Workflow
+  const tl = document.getElementById('timelineContainer');
+  if(tl) tl.innerHTML = workflow.map((w,i) => {
+    const isLast = i === workflow.length-1;
+    const pr = prompts.find(p=>p.id===w.promptId);
+    return `
+      <div class="t-slot">
+        <div class="t-left">
+          <div class="t-dot ${w.dot}"></div>
+          ${!isLast ? '<div class="t-line"></div>' : ''}
+        </div>
+        <div class="t-body">
+          <div class="t-time ${w.cls}">${w.time}</div>
+          <div class="t-heading">${w.title}</div>
+          <ul class="t-list">${w.tasks.map(t=>`<li>${t}</li>`).join('')}</ul>
+          ${pr ? `<button class="t-prompt-btn" onclick="openModal(${w.promptId})">🤖 Copilot Prompt for This Block</button>` : ''}
+        </div>
+      </div>`;
+  }).join('');
+
+  // Objections
+  const ol = document.getElementById('objList');
+  if(ol) ol.innerHTML = objections.map((o,i) => `
+    <div class="obj-item" id="obj-${i}">
+      <div class="obj-hdr" onclick="toggleObj(${i})">
+        <div class="obj-q">${o.q}</div>
+        <div class="obj-toggle">+</div>
+      </div>
+      <div class="obj-body">
+        ${o.responses.map(r=>`
+          <div class="resp-card">
+            <div class="resp-lbl">${r.lbl}</div>
+            <div class="resp-txt">${r.txt}</div>
+          </div>`).join('')}
+        <div class="obj-ai-block">
+          <div class="obj-ai-lbl">🤖 Use in Copilot</div>
+          <div class="obj-prompt-txt">${o.prompt}</div>
+          <button class="obj-copy-btn" onclick="copyText('${o.prompt.replace(/'/g,"\\'")}', this)">📋 Copy Prompt</button>
+        </div>
+      </div>
+    </div>`).join('');
+
+  // Tips
+  const tg = document.getElementById('tipsGrid');
+  if(tg) tg.innerHTML = tips.map(t=>`
+    <div class="tip-card">
+      <span class="tip-icon">${t.icon}</span>
+      <div class="tip-title">${t.title}</div>
+      <div class="tip-txt">${t.txt}</div>
+    </div>`).join('');
+}
+
+/* ═══════════════════════════════════════════════
+   TABS
+═══════════════════════════════════════════════ */
+function switchTab(cat) {
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  const pane = document.getElementById('tab-'+cat);
+  if(pane) pane.classList.add('active');
+  event.target.classList.add('active');
+}
+
+/* ═══════════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════════ */
+let currentPrompt = null;
+
+function openModal(id) {
+  const p = prompts.find(x=>x.id===id);
+  if(!p) return;
+  currentPrompt = p;
+  document.getElementById('mTitle').textContent = p.title;
+
+  // Build highlighted display
+  let display = p.text;
+  p.phs.forEach(ph => {
+    display = display.split('['+ph+']').join(`<span class="ph">[${ph}]</span>`);
+  });
+  // Handle newlines
+  display = display.replace(/\n/g,'<br>');
+  document.getElementById('mDisplay').innerHTML = display;
+
+  // Build fields
+  const fields = document.getElementById('mFields');
+  if(p.phs.length === 0) {
+    fields.innerHTML = '<p style="font-size:.82rem;color:var(--muted);">This prompt is ready to use as-is. Hit Copy Prompt below!</p>';
+  } else {
+    fields.innerHTML = p.phs.map(ph=>`
+      <div class="m-field">
+        <label>${ph.replace(/_/g,' ')}</label>
+        <input type="text" data-ph="${ph}" placeholder="Enter ${ph.toLowerCase()}..." oninput="updateDisplay()">
+      </div>`).join('');
+  }
+
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function updateDisplay() {
+  if(!currentPrompt) return;
+  const inputs = document.querySelectorAll('#mFields input, #mFields textarea');
+  let text = currentPrompt.text;
+  inputs.forEach(inp => {
+    const ph = inp.dataset.ph;
+    const val = inp.value.trim() || `[${ph}]`;
+    text = text.split('['+ph+']').join(val);
+  });
+  let display = text;
+  currentPrompt.phs.forEach(ph => {
+    if(!text.includes(ph.replace(/[\[\]]/g,''))) return;
+    display = display.split('['+ph+']').join(`<span class="ph">[${ph}]</span>`);
+  });
+  display = display.replace(/\n/g,'<br>');
+  document.getElementById('mDisplay').innerHTML = display;
+}
+
+function getFinalPrompt() {
+  if(!currentPrompt) return '';
+  const inputs = document.querySelectorAll('#mFields input, #mFields textarea');
+  let text = currentPrompt.text;
+  inputs.forEach(inp => {
+    const ph = inp.dataset.ph;
+    if(inp.value.trim()) text = text.split('['+ph+']').join(inp.value.trim());
+  });
+  return text;
+}
+
+function copyToClipboard(text, onSuccess) {
+  // Reliable fallback for local HTML files where navigator.clipboard may be blocked
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(onSuccess).catch(() => fallbackCopy(text, onSuccess));
+  } else {
+    fallbackCopy(text, onSuccess);
+  }
+}
+
+function fallbackCopy(text, onSuccess) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.left = '-9999px';
+  ta.style.top = '-9999px';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try {
+    document.execCommand('copy');
+    if (onSuccess) onSuccess();
+  } catch(e) {
+    showToast('Copy failed - please select and copy manually.');
+  }
+  document.body.removeChild(ta);
+}
+
+function copyModal() {
+  const text = getFinalPrompt();
+  copyToClipboard(text, ()=>showToast('Prompt copied - paste it into Copilot!'));
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  currentPrompt = null;
+}
+
+function overlayClick(e) {
+  if(e.target.id === 'overlay') closeModal();
+}
+
+/* ═══════════════════════════════════════════════
+   QUICK COPY
+═══════════════════════════════════════════════ */
+function quickCopy(id) {
+  const p = prompts.find(x=>x.id===id);
+  if(!p) return;
+  copyToClipboard(p.text, ()=>{
+    const btn = document.getElementById('cp-'+id);
+    if(btn){ btn.textContent='✓ Copied!'; btn.classList.add('ok'); setTimeout(()=>{ btn.textContent='📋 Copy'; btn.classList.remove('ok'); },2000); }
+    showToast('Prompt copied to clipboard!');
+  });
+}
+
+function copyText(txt, btn) {
+  copyToClipboard(txt, ()=>{
+    btn.textContent='✓ Copied!';
+    setTimeout(()=>btn.textContent='📋 Copy Prompt',2000);
+    showToast('Prompt copied!');
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   SEARCH
+═══════════════════════════════════════════════ */
+function liveSearch(q) {
+  const query = q.trim().toLowerCase();
+  const sr = document.getElementById('srSection');
+  const ps = document.getElementById('promptSec');
+  if(!query) { clearSearch(); return; }
+  const matches = prompts.filter(p=>
+    p.title.toLowerCase().includes(query) ||
+    p.text.toLowerCase().includes(query) ||
+    p.tag.toLowerCase().includes(query)
+  );
+  document.getElementById('srTitle').textContent = `${matches.length} result${matches.length!==1?'s':''} for "${q}"`;
+  document.getElementById('srGrid').innerHTML = matches.length
+    ? matches.map(p=>renderPromptCard(p)).join('')
+    : '<p style="color:var(--muted);font-size:.88rem;grid-column:1/-1;">No prompts found. Try a different search term.</p>';
+  sr.style.display = 'block';
+  ps.style.display = 'none';
+  sr.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('srSection').style.display = 'none';
+  document.getElementById('promptSec').style.display = 'block';
+}
+
+/* ═══════════════════════════════════════════════
+   CALCULATORS
+═══════════════════════════════════════════════ */
+function calcConversion() {
+  const refs = parseFloat(document.getElementById('cr_ref').value)||0;
+  const adm = parseFloat(document.getElementById('cr_adm').value)||0;
+  if(!refs || !adm) return;
+  const rate = (adm/refs*100).toFixed(1);
+  const benchmark = rate >= 70 ? 'Above industry avg (65–70%)' : rate >= 55 ? 'Near industry avg - room to improve' : 'Below avg - focus on follow-up speed';
+  document.getElementById('cr_rate').textContent = rate + '%';
+  document.getElementById('cr_detail').textContent = benchmark + `. You converted ${adm} of ${refs} referrals.`;
+  document.getElementById('cr_result').classList.add('show');
+}
+
+function calcProjection() {
+  const adm = parseFloat(document.getElementById('mp_adm').value)||0;
+  const done = parseFloat(document.getElementById('mp_days').value)||0;
+  const total = parseFloat(document.getElementById('mp_total').value)||22;
+  const goal = parseFloat(document.getElementById('mp_goal').value)||0;
+  if(!adm || !done) return;
+  const daily = adm/done;
+  const proj = Math.round(daily*total);
+  const rem = Math.max(0,(goal - adm));
+  const daysLeft = Math.max(1, total - done);
+  const perDay = Math.ceil(rem/daysLeft);
+  let detail = `Daily run rate: ${daily.toFixed(1)} admissions/day.`;
+  if(goal) detail += proj >= goal ? ` You are ON PACE to hit your goal of ${goal}.` : ` You need ${perDay}/day for the rest of the month to hit ${goal}.`;
+  document.getElementById('mp_proj').textContent = proj;
+  document.getElementById('mp_detail').textContent = detail;
+  document.getElementById('mp_result').classList.add('show');
+}
+
+function calcBudget() {
+  const budget = parseFloat(document.getElementById('bg_budget').value)||0;
+  const actual = parseFloat(document.getElementById('bg_actual').value)||0;
+  const weeks = parseFloat(document.getElementById('bg_weeks').value)||0;
+  if(!budget || actual==='' || !weeks) return;
+  const gap = Math.max(0, budget - actual);
+  const perWeek = weeks > 0 ? (gap/weeks).toFixed(1) : gap;
+  const pct = ((actual/budget)*100).toFixed(0);
+  document.getElementById('bg_gap').textContent = gap;
+  document.getElementById('bg_detail').textContent = `You are at ${pct}% of budget (${actual} of ${budget}). You need ${perWeek} admissions per week over the next ${weeks} week(s) to close the gap.`;
+  document.getElementById('bg_result').classList.add('show');
+}
+
+/* ═══════════════════════════════════════════════
+   TIER CALCULATOR
+═══════════════════════════════════════════════ */
+function calcTier() {
+  const name = document.getElementById('tc_name').value.trim() || 'This Account';
+  const refs = parseFloat(document.getElementById('tc_refs').value)||0;
+  const rel = parseInt(document.getElementById('tc_rel').value)||1;
+  const growth = parseInt(document.getElementById('tc_growth').value)||1;
+  const vol = parseInt(document.getElementById('tc_vol').value)||1;
+
+  let refScore = refs >= 5 ? 3 : refs >= 2 ? 2 : 1;
+  const score = refScore + rel + growth + vol;
+
+  let tier, tierLabel, recs;
+  if(score >= 10) {
+    tier = 'A'; tierLabel = 'Tier A - High Priority';
+    recs = ['Visit weekly - this is your most important account type','Bring value every visit: data, resources, patient outcome stories','Build relationships with multiple contacts, not just your primary','Look for opportunities to create formal programs or partnerships','Protect this account proactively - know your competition here'];
+  } else if(score >= 6) {
+    tier = 'B'; tierLabel = 'Tier B - Growth Potential';
+    recs = ['Visit every 2 weeks with a specific growth goal each time','Identify what is holding back more referrals and address it directly','Ask for the referral - do not just maintain, actively push for volume','Build a second relationship in the account beyond your primary contact','Set a 60-day target to either grow to Tier A or re-evaluate tier'];
+  } else {
+    tier = 'C'; tierLabel = 'Tier C - Maintenance Mode';
+    recs = ['Monthly visit minimum - keep presence without over-investing time','Focus on quick value-adds: drop off something useful, keep it short','Watch for any changes: new staff, new ownership, competitive shifts','Re-evaluate this account every 90 days for reclassification','Use this as a stretch goal: one small referral ask per visit'];
+  }
+
+  document.getElementById('tr_letter').textContent = tier;
+  document.getElementById('tr_acctname').textContent = name;
+  document.getElementById('tr_tierline').textContent = tierLabel;
+  document.getElementById('tr_recs').innerHTML = recs.map(r=>`<li>${r}</li>`).join('');
+  const res = document.getElementById('tr_result');
+  res.classList.add('show');
+  res.querySelector('.tr-letter').style.background = tier==='A'?'var(--lime)':tier==='B'?'var(--blue)':'var(--sky)';
+}
+
+/* ═══════════════════════════════════════════════
+   OBJECTIONS ACCORDION
+═══════════════════════════════════════════════ */
+function toggleObj(i) {
+  const el = document.getElementById('obj-'+i);
+  el.classList.toggle('open');
+}
+
+/* ═══════════════════════════════════════════════
+   NAV & SIDEBAR
+═══════════════════════════════════════════════ */
+function goTo(id) {
+  const el = document.getElementById(id);
+  if(el){ el.scrollIntoView({behavior:'smooth',block:'start'}); }
+  document.querySelectorAll('.nav-a').forEach(a=>a.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  if(window.innerWidth<=900) toggleSidebar();
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sbOverlay').classList.toggle('show');
+}
+
+// Active nav on scroll
+const sections = ['home','prompts','workflow','calculators','tiering','objections','tips'];
+window.addEventListener('scroll', ()=>{
+  let current = 'home';
+  sections.forEach(id=>{
+    const el = document.getElementById(id) || document.getElementById(id+'Sec');
+    if(el && window.scrollY >= el.offsetTop - 120) current = id;
+  });
+  document.querySelectorAll('.nav-a').forEach(a=>{
+    a.classList.toggle('active', a.getAttribute('onclick')?.includes("'"+current+"'"));
+  });
+});
+
+/* ═══════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════ */
+function showToast(msg='Copied!') {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+/* ═══════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', renderAll);
+</script>
+</body>
+</html>
